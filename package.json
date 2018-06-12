@@ -1,0 +1,42 @@
+{
+  "name": "life",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "DEBUG=*_ nodemon ./src/app.js --exec babel-node",
+    "debug": "nodemon --inspect ./src/app.js --exec babel-node"
+  },
+  "dependencies": {
+    "await-to-js": "^2.0.1",
+    "babel-preset-es2017": "^6.24.1",
+    "bcrypt": "^2.0.1",
+    "chalk": "^2.4.1",
+    "connect-redis": "^3.3.3",
+    "cookie-parser": "~1.4.3",
+    "debug": "^2.6.9",
+    "dotenv": "^6.0.0",
+    "express": "~4.16.0",
+    "express-flash": "0.0.2",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.2.0",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "mongodb": "^3.0.10",
+    "mongoose": "^5.1.4",
+    "morgan": "~1.9.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
+  },
+  "main": "app.js",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-1": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "kexec": "^3.0.0",
+    "nodemon": "^1.17.5"
+  }
+}
