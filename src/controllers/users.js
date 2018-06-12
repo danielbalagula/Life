@@ -17,8 +17,8 @@ usersRouter.post('/register', registerValidator, async (req, res, next) => {
         return next('Already logged in');
     }
     const newUser = new User({
-        email      : req.body.email,
-        password   : User.generateHash(req.body.password)
+        email: req.body.email,
+        password: User.generateHash(req.body.password)
     });
     let [findErr, existingUser] = await to(User.findOne({email: req.body.email}));
     if (findErr) return next(findErr);
@@ -32,7 +32,7 @@ usersRouter.post('/register', registerValidator, async (req, res, next) => {
     req.logIn(savedUser, loginErr => {
         if (loginErr) return next(loginErr);
         usersLogger(`[${req.id}] ${savedUser.email} successfully registered`);
-        res.status(201).send('Successfully registered');
+        return res.status(201).send('Successfully registered');
     }); 
 });
 
@@ -48,7 +48,7 @@ usersRouter.post('/login', loginValidator, (req, res, next) => {
         req.logIn(user, loginErr => {
             if (loginErr) return next(loginErr);
             usersLogger(`[${req.id}] ${user.email} successfully logged in`);
-            res.send(user);
+            return res.send(user);
         }); 
     })(req, res, next);
 });
@@ -61,6 +61,7 @@ usersRouter.get('/logout', (req, res, next) => {
     let user = req.user;
     req.logout();
     req.session.destroy(err => {
+        if (err) usersLogger(`Error destroying ${user.email}\'s session: ${err}`);
         usersLogger(`[${req.id}] ${user.email} successfully logged out`);
         req.user = null;
         return res.status(200).send('Successfully logged out')

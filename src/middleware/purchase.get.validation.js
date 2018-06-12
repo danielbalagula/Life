@@ -1,7 +1,7 @@
 import validator  from 'express-validator/check';
 import sanitizer  from 'express-validator/filter';
 import categories from './../models/purchase/categories';
-import formatter  from './errorFormatter';
+import formatter  from './express.validator.formatter';
 
 const { buildCheckFunction, validationResult }  = validator;
 const { buildSanitizeFunction }                 = sanitizer;
@@ -13,30 +13,30 @@ module.exports = [
         .customSanitizer(category => {
             return category.toLowerCase();
         }),
-    sanitize('start_date')
-        .customSanitizer(start_date => {
-            return Math.floor( Math.max(0, start_date / (1000 * 3600)) );
+    sanitize('startDate')
+        .customSanitizer(startDate => {
+            return Math.floor( Math.max(0, startDate / (1000 * 3600)) );
         }),
-    sanitize('end_date')
-        .customSanitizer(end_date => {
+    sanitize('endDate')
+        .customSanitizer(endDate => {
             let currentHour = new Date().getTime() / (1000 * 3600);
-            return Math.floor( Math.min(currentHour, end_date / (1000 * 3600)) );
+            return Math.floor( Math.min(currentHour, endDate / (1000 * 3600)) );
         }),
-    check('start_date')
+    check('startDate')
         .optional()
         .toFloat()
         .isFloat().withMessage('Start date should be positive in milliseconds (i.e. Date.now())')
-        .custom(start_date => {
+        .custom(startDate => {
             let currentHour = new Date().getTime() / (1000 * 3600);
-            return currentHour >= start_date;
+            return currentHour >= startDate;
         }).withMessage('Start date can\'t be greater than current date'),
-    check('end_date')
+    check('endDate')
         .optional()
         .toFloat()
         .isFloat({min: 0}).withMessage('End date should be positive in milliseconds (i.e. Date.now())')
-        .custom(end_date => {
+        .custom(endDate => {
             let currentHour = new Date().getTime() / (1000 * 3600);
-            return currentHour >= end_date;
+            return currentHour >= endDate;
         }).withMessage('End date can\'t be greater than current date'),
     check('name')
         .optional()
@@ -78,5 +78,5 @@ module.exports = [
             next(results.array());
         }
         next();
-    },
+    }
 ];

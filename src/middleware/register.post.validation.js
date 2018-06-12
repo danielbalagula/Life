@@ -1,6 +1,6 @@
 import validator  from 'express-validator/check';
 import sanitizer  from 'express-validator/filter';
-import formatter  from './errorFormatter';
+import formatter  from './express.validator.formatter';
 
 const { buildCheckFunction, validationResult }  = validator;
 const { buildSanitizeFunction }                 = sanitizer;

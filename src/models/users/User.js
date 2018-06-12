@@ -13,7 +13,7 @@ userSchema.statics.generateHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 };
 
-userSchema.methods.isValidPassword = async function(password) {
+userSchema.methods.isValidPassword = async function isValidPassword(password) {
     return bcrypt.compareSync(password, this.password);
 };
 

@@ -5,7 +5,7 @@ import to            from 'await-to-js';
 import User          from '../models/users/User';
 
 const LocalStrategy = passportLocal.Strategy;
-const authLogger = debug('auth_')
+const authLogger = debug('auth_');
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -13,6 +13,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser( async (id, done) => {
     let [err, user] = await to(User.findById(id));
+    delete user.password;
     done(err, user);
 });
 
@@ -39,5 +40,5 @@ exports.isAuthenticated = (req, res, next) => {
         return next();
     }
     res.status(401);
-    next('Must be logged in');
+    return next('Must be logged in');
 };

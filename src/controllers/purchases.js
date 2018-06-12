@@ -14,13 +14,13 @@ let purchasesRouter = express.Router();
 let purchasesLogger = debug('purchases_');
 
 purchasesRouter.get('/', isAuthenticated, getPurchasesValidator, async (req, res, next) => {
-    let {start_date, end_date, ...params} = req.query;
+    let {startDate, endDate, ...params} = req.query;
     let query = {
         ...params,
         ...{
-            date_purchased: {
-                $gte  : (start_date || 0),
-                $lt   : (end_date || new Date().getTime() / (1000 * 3600))
+            datePurchased: {
+                $gte: (startDate || 0),
+                $lt: (endDate || new Date().getTime() / (1000 * 3600))
             }
         },
         ...{
@@ -46,12 +46,12 @@ purchasesRouter.post('/', isAuthenticated, postPurchasesValidator, async(req, re
         }
     });
     
-    Promise.all([newPurchase.save(), User.findOneAndUpdate({_id: req.user.id},{
+    Promise.all([newPurchase.save(), User.findOneAndUpdate({_id: req.user.id}, {
         $addToSet: {
             purchases: newPurchaseId
         }
-    })]).then((results) => {
-        purchasesLogger(`[${req.id}] ${req.user.email} added product with id ${newPurchaseId}`)
+    })]).then(([savedPurchase, updatedUser]) => {
+        purchasesLogger(`[${req.id}] ${updatedUser.email} added product with id ${savedPurchase._id}`)
         res.status(201).send(`Added product for ${req.user.email}`);
     }).catch((err) => {
         next(err)

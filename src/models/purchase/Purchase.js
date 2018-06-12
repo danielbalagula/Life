@@ -17,14 +17,14 @@ const purchaseSchema = new Schema({
     category: {
         type: String, 
         required: true,
-        enum: categories,
+        enum: categories
     },
     luxury: {
         type: Boolean,
         required: true,
         default: false
     },
-    date_purchased: {
+    datePurchased: {
         type: Number, 
         required: true, 
         default: Math.floor(Date.now() / (1000 * 3600))
@@ -45,7 +45,12 @@ const purchaseSchema = new Schema({
     alternatives: [{
         name: String,
         cost: Number
-    }]
+    }],
+    dateAdded: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    }
 });
 
 module.exports = mongoose.model('Purchase', purchaseSchema);

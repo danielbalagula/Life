@@ -1,0 +1,44 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "comma-dangle": 1,
+        "no-empty": 1,
+        "no-extra-semi": 1,
+        "no-irregular-whitespace": 2,
+        "no-unreachable": 2,
+        "valid-jsdoc": 1,
+
+        "complexity": 1,
+        "consistent-return": 1,
+        "dot-notation": 2,
+        "eqeqeq": 2,
+        "no-else-return": 1,
+        "no-new": 2,
+        "no-new-func": 2,
+        "no-redeclare": 2,
+        "no-return-assign": 2,
+        "no-self-compare": 2,
+        "strict": 2,
+        
+        "no-use-before-define": 2,
+        "no-unused-vars": 2,
+        "no-undef-init": 2,
+
+        "brace-style": 2,
+        "camelcase": 2,
+        "comma-spacing": 2,
+        "func-names": 2,
+        "key-spacing": 2,
+        "no-lonely-if": 2,
+        "no-mixed-spaces-and-tabs": 2,
+        "no-multiple-empty-lines": 1,
+        "semi-spacing": 1,
+        "no-spaced-func": 1,
+        "quotes": ["error", "single"],
+
+        "no-var": 2
+    }
+}

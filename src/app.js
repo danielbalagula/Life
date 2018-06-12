@@ -1,4 +1,3 @@
-"use strict";
 import express           from 'express';
 import path              from 'path';
 import bodyParser        from 'body-parser';
@@ -10,14 +9,14 @@ import shortid           from 'shortid';
 
 import purchasesRouter   from './controllers/purchases';
 import usersRouter       from './controllers/users';
-import initDB            from './config/db';
-import initPassport      from './config/passport';
+import './config/db';
+import './config/passport';
 import session           from './config/redis';
 
 let app = express();
 let httpLogger = debug('http_');
 let errorLogger = debug('error_');
-httpLogger(`Starting application on port ${process.env.PORT || 3000}`)
+httpLogger(`Starting application on port ${process.env.PORT || 3000}`);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -41,12 +40,12 @@ app.post('/register',                usersRouter);
 app.post('/login',                   usersRouter);
 app.get('/logout',                   usersRouter);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     errorLogger(chalk.white(`[${req.id}]`), chalk.red(err));
     res.send(err);
 });
 
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
     res.send('hi');
 });
 

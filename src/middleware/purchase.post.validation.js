@@ -1,7 +1,7 @@
 import validator  from 'express-validator/check';
 import sanitizer  from 'express-validator/filter';
 import categories from './../models/purchase/categories';
-import formatter  from './errorFormatter';
+import formatter  from './express.validator.formatter';
 
 const { buildCheckFunction, validationResult }  = validator;
 const { buildSanitizeFunction }                 = sanitizer;
@@ -13,21 +13,21 @@ module.exports = [
         .customSanitizer(category => {
             return category.toLowerCase();
         }),
-    sanitize('date_purchased')
-        .customSanitizer(date_purchased => {
-            return Math.floor(date_purchased / (1000 * 3600));
+    sanitize('datePurchased')
+        .customSanitizer(datePurchased => {
+            return Math.floor(datePurchased / (1000 * 3600));
         }),
-    check('date_purchased')
+    check('datePurchased')
         .optional()
         .toFloat()
         .isFloat().withMessage('Date should be in milliseconds (i.e. Date.now())')
-        .custom(date_purchased => {
+        .custom(datePurchased => {
             let currentHour = new Date().getTime() / (1000 * 3600);
-            return currentHour >= date_purchased;
+            return currentHour >= datePurchased;
         }).withMessage('Purchase date can\'t be greater than current date')
-        .custom(date_purchased => {
+        .custom(datePurchased => {
             let currentHour = new Date().getTime() / (1000 * 3600);
-            return currentHour <= date_purchased + (31622400 / 3600);
+            return currentHour <= datePurchased + (31622400 / 3600);
         }).withMessage('Purchase date must be within one year of current date'),
     check('name')
         .exists().withMessage('Name of purchase required')
