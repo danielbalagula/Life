@@ -6,6 +6,7 @@ import passport          from 'passport';
 import flash             from 'express-flash';
 import debug             from 'debug';
 import chalk             from 'chalk';
+import shortid           from 'shortid';
 
 import purchasesRouter   from './controllers/purchases';
 import usersRouter       from './controllers/users';
@@ -30,16 +31,18 @@ app.use(passport.session());
 app.use(flash());
 
 app.use((req, res, next) => {
-    httpLogger(`${req.method} ${req.path}`) 
+    req.id = shortid.generate();
+    httpLogger(`[${req.id}] ${req.method} ${req.path}`);
     next();
 });
 
 app.use('/purchases',                purchasesRouter);
-app.post(['/register', '/login'],    usersRouter);
+app.post('/register',                usersRouter);
+app.post('/login',                   usersRouter);
 app.get('/logout',                   usersRouter);
 
 app.use((err, req, res, next) => {
-    errorLogger(chalk.white(req.user ? req.user.email : 'anon'), chalk.red(err));
+    errorLogger(chalk.white(`[${req.id}]`), chalk.red(err));
     res.send(err);
 });
 

@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
     email: {type: String, unique: true},
     password: String,
-    purchases: [{ type: Schema.Types.ObjectId, ref: 'Purchase' }]
+    purchases: [{ type: String, ref: 'Purchase' }]
 });
 
 userSchema.statics.generateHash = (password) => {

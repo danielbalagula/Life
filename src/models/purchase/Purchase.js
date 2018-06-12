@@ -1,9 +1,15 @@
 import mongoose   from 'mongoose';
+import shortid    from 'shortid';
 import categories from './categories';
 
 const { Schema } = mongoose;
 
 const purchaseSchema = new Schema({
+    _id: {
+        type: String,
+        default: shortid.generate(),
+        required: true
+    },
     name: {
         type: String,
         required: true

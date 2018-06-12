@@ -31,7 +31,7 @@ usersRouter.post('/register', registerValidator, async (req, res, next) => {
     
     req.logIn(savedUser, loginErr => {
         if (loginErr) return next(loginErr);
-        usersLogger(`${savedUser.email} successfully registered`);
+        usersLogger(`[${req.id}] ${savedUser.email} successfully registered`);
         res.status(201).send('Successfully registered');
     }); 
 });
@@ -47,13 +47,13 @@ usersRouter.post('/login', loginValidator, (req, res, next) => {
 
         req.logIn(user, loginErr => {
             if (loginErr) return next(loginErr);
-            usersLogger(`${user.email} successfully logged in`);
+            usersLogger(`[${req.id}] ${user.email} successfully logged in`);
             res.send(user);
         }); 
     })(req, res, next);
 });
 
-usersRouter.get('logout', (req, res, next) => {
+usersRouter.get('/logout', (req, res, next) => {
     if (!req.user) {
         res.status(422);
         return next('Not logged in');
@@ -61,7 +61,7 @@ usersRouter.get('logout', (req, res, next) => {
     let user = req.user;
     req.logout();
     req.session.destroy(err => {
-        usersLogger(`${user.email} successfully logged out`);
+        usersLogger(`[${req.id}] ${user.email} successfully logged out`);
         req.user = null;
         return res.status(200).send('Successfully logged out')
     });

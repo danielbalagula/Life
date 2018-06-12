@@ -35,7 +35,7 @@ passport.use(new LocalStrategy({
 
 exports.isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
-        authLogger(`${req.user.email} is authenticated`);
+        authLogger(`[${req.id}] ${req.user.email} is authenticated`);
         return next();
     }
     res.status(401);

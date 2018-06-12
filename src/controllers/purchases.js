@@ -1,5 +1,8 @@
 import express                    from 'express';
 import to                         from 'await-to-js';
+import shortid                    from 'shortid';
+import debug                      from 'debug';
+
 import Purchase                   from '../models/purchase/Purchase';
 import User                       from '../models/users/User';
 import { isAuthenticated }        from '../config/passport';
@@ -7,6 +10,8 @@ import postPurchasesValidator     from '../middleware/purchase.post.validation';
 import getPurchasesValidator      from '../middleware/purchase.get.validation';
 
 let purchasesRouter = express.Router();
+
+let purchasesLogger = debug('purchases_');
 
 purchasesRouter.get('/', isAuthenticated, getPurchasesValidator, async (req, res, next) => {
     let {start_date, end_date, ...params} = req.query;
@@ -28,30 +33,30 @@ purchasesRouter.get('/', isAuthenticated, getPurchasesValidator, async (req, res
         res.status(500);
         next('Internal server error retrieving purchase(s)');
     }
+    purchasesLogger(`[${req.id}] ${req.user.email} retrieved ${result.length} products`);
     res.status(200).send(result);
 });
 
 purchasesRouter.post('/', isAuthenticated, postPurchasesValidator, async(req, res, next) => {
-    let newPurchase = new Purchase(req.body);
+    let newPurchaseId = shortid.generate();
+    let newPurchase = new Purchase({
+        ...req.body,
+        ...{
+            _id: newPurchaseId
+        }
+    });
     
-    let [newPurchaseErr, savedPurchase] = await to(newPurchase.save());
-    if (newPurchaseErr) next(newPurchaseErr);
-
-    let [getUserErr, user] = await to(User.findById(req.user.id));
-    if (getUserErr) {
-        Purchase.deleteOne({_id: savedPurchase._id});
-        next(getUserErr);
-    }
-    
-    user.purchases.unshift(savedPurchase);
-    
-    let addPurchaseErr = await to(user.save());
-    if (addPurchaseErr) {
-        Purchase.deleteOne({_id: savedPurchase._id});
-        next(addPurchaseErr);
-    }
-
-    res.status(201)(`Added product for ${req.user.email}`);
+    Promise.all([newPurchase.save(), User.findOneAndUpdate({_id: req.user.id},{
+        $addToSet: {
+            purchases: newPurchaseId
+        }
+    })]).then((results) => {
+        purchasesLogger(`[${req.id}] ${req.user.email} added product with id ${newPurchaseId}`)
+        res.status(201).send(`Added product for ${req.user.email}`);
+    }).catch((err) => {
+        next(err)
+        Purchase.deleteOne({_id: newPurchaseId});
+    })
 });
 
 module.exports = purchasesRouter;

@@ -3,7 +3,7 @@ import session           from 'express-session';
 import redis             from 'redis';
 import debug             from 'debug';
 import chalk             from 'chalk';
-import                   '../env';
+import                   './env';
 
 let redisLogger = debug('redis_');
 
