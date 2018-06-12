@@ -29,8 +29,8 @@ usersRouter.post('/register', registerValidator, async (req, res, next) => {
     let [saveErr, savedUser] = await to(newUser.save());
     if (saveErr) return next(saveErr);
     
-    req.logIn(savedUser, registerErr => {
-        if (registerErr) return next(registerErr);
+    req.logIn(savedUser, loginErr => {
+        if (loginErr) return next(loginErr);
         usersLogger(`${savedUser.email} successfully registered`);
         res.status(201).send('Successfully registered');
     }); 

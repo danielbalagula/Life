@@ -2,7 +2,7 @@ import passport      from 'passport';
 import passportLocal from 'passport-local';
 import debug         from 'debug';
 import to            from 'await-to-js';
-import User          from './models/users/User';
+import User          from '../models/users/User';
 
 const LocalStrategy = passportLocal.Strategy;
 const authLogger = debug('auth_')

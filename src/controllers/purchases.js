@@ -2,7 +2,7 @@ import express                    from 'express';
 import to                         from 'await-to-js';
 import Purchase                   from '../models/purchase/Purchase';
 import User                       from '../models/users/User';
-import { isAuthenticated }        from '../passport';
+import { isAuthenticated }        from '../config/passport';
 import postPurchasesValidator     from '../middleware/purchase.post.validation';
 import getPurchasesValidator      from '../middleware/purchase.get.validation';
 

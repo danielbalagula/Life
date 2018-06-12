@@ -9,9 +9,9 @@ import chalk             from 'chalk';
 
 import purchasesRouter   from './controllers/purchases';
 import usersRouter       from './controllers/users';
-import initDB            from './db';
-import initPassport      from './passport';
-import session           from './redis';
+import initDB            from './config/db';
+import initPassport      from './config/passport';
+import session           from './config/redis';
 
 let app = express();
 let httpLogger = debug('http_');
