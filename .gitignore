@@ -62,3 +62,6 @@ typings/
 
 # caching files for gulp builds
 .gulp-cache
+
+# dist
+dist/
